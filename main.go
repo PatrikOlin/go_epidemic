@@ -12,6 +12,7 @@ import (
 	"time"
 
 	"github.com/nsf/termbox-go"
+	 "github.com/BurntSushi/xgbutil"		
 )
 
 // image shown on the screen
@@ -79,6 +80,11 @@ func main() {
 	createPopulation()
 	infectOneCell()
 
+	X, err := xgbutil.NewConn()
+	if err != nil {
+		log.Fatal(err)
+	}
+
 	var t int
 	// main simulation loop
 	for t = 0; !endSim && (t < *numDays); t++ {
@@ -135,7 +141,7 @@ func main() {
 		}
 
 		img = draw(*width*CELLSIZE+CELLSIZE, *width*CELLSIZE+CELLSIZE, cells)
-		printImage(img.SubImage(img.Rect))
+		printImage(X, img.SubImage(img.Rect))
 
 		neverInfected = countNeverInfected()
 		count := countInfected()

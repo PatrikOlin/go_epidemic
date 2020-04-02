@@ -1,14 +1,19 @@
 package main
 
 import (
-	"bytes"
-	"encoding/base64"
+	// "bytes"							
+	// "encoding/base64"
 	"fmt"
 	"image"
 	"image/png"
+	// "log"
 	"os"
 
 	"github.com/llgcode/draw2d/draw2dimg"
+	 "github.com/BurntSushi/xgbutil"		
+	// "github.com/BurntSushi/xgbutil/xevent"
+	"github.com/BurntSushi/xgbutil/xgraphics"
+
 )
 
 // draw the cells
@@ -27,11 +32,16 @@ func draw(w int, h int, cells []Cell) *image.RGBA {
 }
 
 // Print the image to iTerm2 terminal
-func printImage(img image.Image) {
-	var buf bytes.Buffer
-	png.Encode(&buf, img)
-	imgBase64Str := base64.StdEncoding.EncodeToString(buf.Bytes())
-	fmt.Printf("\x1b[2;0H\x1b]1337;File=inline=1:%s\a", imgBase64Str)
+func printImage(X *xgbutil.XUtil, img image.Image) {
+	ximg := xgraphics.NewConvert(X, img)
+
+	ximg.XShowExtra("PANDEMIC!", true)
+
+	// xevent.Main(X)						
+	// var buf bytes.Buffer
+	// png.Encode(&buf, img)
+	// imgBase64Str := base64.StdEncoding.EncodeToString(buf.Bytes())
+	// fmt.Printf("\x1b[2;0H\x1b]1337;File=inline=1:%s\a", imgBase64Str)
 }
 
 // save the image
